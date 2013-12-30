@@ -1,0 +1,28 @@
+{
+  "name": "test",
+  "version": "0.0.0",
+  "authors": [
+    "Xingchen Yu <initialxy@gmail.com>"
+  ],
+  "description": "test",
+  "main": "./main.js",
+  "keywords": [
+    "test"
+  ],
+  "license": "MIT",
+  "homepage": "http://www.initialxy.com",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "~3.0.3"
+  },
+  "devDependencies": {
+    "less": "~1.5.1"
+  }
+}
