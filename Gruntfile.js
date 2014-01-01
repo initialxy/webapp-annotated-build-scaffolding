@@ -1,6 +1,11 @@
+"use strict";
 var path = require("path");
 
 module.exports = function(grunt) {
+    /**
+     * Feel free to configure app, copy:assets, copy:dev, copy:prd, copy:qa
+     * targets. Only edit the others if you know what you are doing.
+     */
     grunt.initConfig({
         "app": {
             src: "src",
@@ -9,13 +14,8 @@ module.exports = function(grunt) {
             staging: ".tmp"
         },
         "copy": {
-            cmp: {
+            assets: {
                 files: [{
-                        expand: true,
-                        cwd: "<%= app.src %>",
-                        src: ["**/*.html"],
-                        dest: "<%= app.dist %>"
-                    }, {
                         expand: true,
                         cwd: "<%= app.src %>",
                         filter: "isFile",
@@ -59,6 +59,15 @@ module.exports = function(grunt) {
                         dest: "<%= app.src %>/config"
                     }
                 ]
+            },
+            html: {
+                files: [{
+                        expand: true,
+                        cwd: "<%= app.src %>",
+                        src: ["**/*.html"],
+                        dest: "<%= app.dist %>"
+                    }
+                ]
             }
         },
         "useminPrepare": {
@@ -74,21 +83,19 @@ module.exports = function(grunt) {
                 assetsDirs: ["<%= app.dist %>"]
             }
         },
-        "preLessConcat": {
+        "postUseminPrepare": {
             paths: ["<%= app.src %>/css"]
         },
-        "preUglify": {
-            exclude: {
+        "postConcat": {
+            uglifyExclude: {
                 files: ["<%= app.dist %>/js/libs.js"]
-            }
-        },
-        "preCssmin": {
-            exclude: {
+            },
+            cssminExclude: {
                 files: ["<%= app.dist %>/css/libs.css"]
             }
         },
         "htmlrefs": {
-            dist: {
+            cmp: {
                 src: ["<%= app.dist %>/**/*.html"],
             }
         },
@@ -103,6 +110,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks("grunt-contrib-concat");
     grunt.loadNpmTasks("grunt-contrib-uglify");
     grunt.loadNpmTasks("grunt-contrib-less");
+    grunt.loadNpmTasks("grunt-contrib-sass");
     grunt.loadNpmTasks("grunt-contrib-cssmin");
     grunt.loadNpmTasks("grunt-htmlrefs");
     grunt.loadNpmTasks("grunt-contrib-clean");
@@ -110,12 +118,12 @@ module.exports = function(grunt) {
     /**
      * Compile LESS before concat.
      */
-    grunt.registerTask("preLessConcat",
+    grunt.registerTask("postUseminPrepare",
             "Task to be run before less and concat.",
             function() {
         grunt.task.requires("useminPrepare");
 
-        var config = grunt.config("preLessConcat");
+        var config = grunt.config("postUseminPrepare");
         var appConfig = grunt.config("app");
         var concatConfig = grunt.config("concat");
         var files = concatConfig
@@ -124,8 +132,15 @@ module.exports = function(grunt) {
                 || [];
 
         var lessExtRegex = /.*\.less/;
+        var sassExtRegex = /.*\.sass/;
 
         var lessConfig = {
+            cmp: {
+                files: []
+            }
+        };
+
+        var sassConfig = {
             cmp: {
                 files: []
             }
@@ -135,11 +150,17 @@ module.exports = function(grunt) {
             lessConfig.cmp.options = {
                 paths: config.paths
             };
+
+            sassConfig.cmp.options = {
+                loadPath: config.paths
+            };
         }
 
         for (var i = 0; i < files.length; i++) {
             for (var j = 0; j < files[i].src.length; j++) {
-                if (lessExtRegex.test(files[i].src[j])) {
+                var isLess = lessExtRegex.test(files[i].src[j]);
+                var isSass = sassExtRegex.test(files[i].src[j]);
+                if (isLess || isSass) {
                     var compiledFile = path.normalize(files[i].src[j])
                             .split(path.sep);
                     if (compiledFile.length > 0) {
@@ -152,7 +173,12 @@ module.exports = function(grunt) {
                         src: [files[i].src[j]],
                         dest: compiledFile
                     };
-                    lessConfig.cmp.files.push(file);
+
+                    if (isLess) {
+                        lessConfig.cmp.files.push(file);
+                    } else if (isSass) {
+                        sassConfig.cmp.files.push(file);
+                    }
 
                     files[i].src[j] = compiledFile;
                 }
@@ -160,10 +186,14 @@ module.exports = function(grunt) {
         }
 
         grunt.config("less", lessConfig);
+        grunt.config("sass", sassConfig);
         grunt.config("concat", concatConfig);
 
         grunt.log.writeln("less config is now: ");
         grunt.log.writeln(JSON.stringify(lessConfig, null, 4));
+
+        grunt.log.writeln("sass config is now: ");
+        grunt.log.writeln(JSON.stringify(sassConfig, null, 4));
 
         grunt.log.writeln("concat config is now: ");
         grunt.log.writeln(JSON.stringify(concatConfig, null, 4));
@@ -191,75 +221,70 @@ module.exports = function(grunt) {
     }
 
     /**
-     * Convenience wrapper to perform excludeFilesForCopy on configs.
+     * The purpose of this task is to exclude files from uglify and cssmin.
+     * Excluded files will be copied instead. This could be useful when you are
+     * dealing with concatenated library files, which is already minified and
+     * copyright statements need to be preserved.
      */
-    function modifyConfigForExclude(
-            /* "" */    from,
-            /* "" */    exclude) {
-        var fromConfig = grunt.config(from);
-        var excludeConfig = grunt.config(exclude);
-        var fromFiles = fromConfig
-                && fromConfig.generated
-                && fromConfig.generated.files
+    grunt.registerTask("postConcat",
+            "Task to be run following concat.",
+            function() {
+        grunt.task.requires("useminPrepare");
+        grunt.task.requires("concat");
+
+        var uglifyConfig = grunt.config("uglify");
+        var cssminConfig = grunt.config("cssmin");
+        var config = grunt.config("postConcat");
+        var uglifyFiles = uglifyConfig
+                && uglifyConfig.generated
+                && uglifyConfig.generated.files
                 || [];
-        var excludeFiles = excludeConfig
-                && excludeConfig.exclude
-                && excludeConfig.exclude.files
+        var cssminFiles = cssminConfig
+                && cssminConfig.generated
+                && cssminConfig.generated.files
+                || [];
+        var uglifyExcludeFiles = config
+                && config.uglifyExclude
+                && config.uglifyExclude.files
+                || [];
+        var cssminExcludeFiles = config
+                && config.cssminExclude
+                && config.cssminExclude.files
                 || [];
 
-        excludeFilesForCopy(fromFiles, excludeFiles);
+        excludeFilesForCopy(uglifyFiles, uglifyExcludeFiles);
 
-        if (fromConfig) {
-            grunt.config(from, fromConfig);
+        if (uglifyConfig) {
+            grunt.config("uglify", uglifyConfig);
 
-            grunt.log.writeln(from + " config is now: ");
-            grunt.log.writeln(JSON.stringify(fromConfig, null, 4));
+            grunt.log.writeln("uglify config is now: ");
+            grunt.log.writeln(JSON.stringify(uglifyConfig, null, 4));
         }
-    }
 
-    /**
-     * The purpose of this task is to exclude files from uglify. Excluded files
-     * will be copied instead. This could be useful when you are dealing with
-     * concatenated library files, which is already minified and copyright
-     * statements need to be preserved.
-     */
-    grunt.registerTask("preUglify",
-            "Task to be run before uglify.",
-            function() {
-        grunt.task.requires("useminPrepare");
+        if (cssminConfig) {
+            grunt.config("cssmin", cssminConfig);
 
-        modifyConfigForExclude("uglify", "preUglify");
-    });
-
-    /**
-     * The purpose of this task is to exclude files from cssmin. Excluded files
-     * will be copied instead. This could be useful when you are dealing with
-     * concatenated library files, which is already minified and copyright
-     * statements need to be preserved.
-     */
-    grunt.registerTask("preCssmin",
-            "Task to be run before cssmin.",
-            function() {
-        grunt.task.requires("useminPrepare");
-
-        modifyConfigForExclude("cssmin", "preCssmin");
+            grunt.log.writeln("cssmin config is now: ");
+            grunt.log.writeln(JSON.stringify(cssminConfig, null, 4));
+        }
     });
 
     grunt.registerTask("dev", [
         "copy:dev"]);
 
     grunt.registerTask("cmp", [
-        "copy:cmp",
+        "copy:html",
+        "copy:assets",
         "useminPrepare",
-        "preLessConcat",
+        "postUseminPrepare",
         "less:cmp",
+        "sass:cmp",
         "concat",
-        "preUglify",
+        "postConcat",
         "uglify",
-        "preCssmin",
         "cssmin",
         "usemin",
-        "htmlrefs",
+        "htmlrefs:cmp",
         "clean:cmpPostBuild"]);
 
     grunt.registerTask("prd", [
