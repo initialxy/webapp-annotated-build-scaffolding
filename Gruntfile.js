@@ -74,7 +74,14 @@ module.exports = function(grunt) {
             html: "<%= app.src %>/**/*.html",
             options: {
                 dest: "<%= app.dist %>",
-                staging: "<%= app.staging %>"
+                staging: "<%= app.staging %>",
+                flow: {
+                    steps: {
+                        'js': ['uglifyjs'],
+                        'css': ['concat', 'cssmin']
+                    },
+                    post: {}
+                }
             }
         },
         "usemin": {
@@ -83,17 +90,23 @@ module.exports = function(grunt) {
                 assetsDirs: ["<%= app.dist %>"]
             }
         },
+        "uglify": {
+            generated: {
+                options: {
+                    preserveComments: "some"
+                }
+            }
+        },
+        "cssmin": {
+            generated: {
+                options: {
+                    keepSpecialComments: "*"
+                }
+            }
+        },
         "postUseminPrepare": {
             staging: "<%= app.staging %>",
             paths: ["<%= app.src %>/css"]
-        },
-        "postConcat": {
-            uglifyExclude: {
-                files: ["<%= app.dist %>/js/libs.js"]
-            },
-            cssminExclude: {
-                files: ["<%= app.dist %>/css/libs.css"]
-            }
         },
         "htmlrefs": {
             cmp: {
@@ -129,7 +142,6 @@ module.exports = function(grunt) {
         "less:cmp",
         "sass:cmp",
         "concat",
-        "postConcat",
         "uglify",
         "cssmin",
         "usemin",
