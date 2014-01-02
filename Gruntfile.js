@@ -116,6 +116,44 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks("grunt-contrib-clean");
 
     /**
+     * Relocate src files of given ext from concatFiles to stagging folder.
+     * Overwrite its original path in concatFiles with the new path. Return
+     * list of files with src and dest with src being the original path and dest
+     * being the new path. Will mutate concatFiles.
+     */
+    function relocateConcat(
+            /* [dest: "", src: []] */   concatFiles,
+            /* // */                    extRegex) {
+        var result = [];
+        var appConfig = grunt.config("app");
+
+        for (var i = 0; i < concatFiles.length; i++) {
+            for (var j = 0; j < concatFiles[i].src.length; j++) {
+                if (extRegex.test(concatFiles[i].src[j])) {
+                    var newPath = path.normalize(concatFiles[i].src[j])
+                            .split(path.sep);
+                    if (newPath.length > 0) {
+                        newPath[0] = appConfig.staging;
+                    }
+
+                    newPath = path.join.apply(null, newPath);
+
+                    var file = {
+                        src: [concatFiles[i].src[j]],
+                        dest: newPath
+                    };
+
+                    result.push(file);
+
+                    concatFiles[i].src[j] = newPath;
+                }
+            }
+        }
+
+        return result;
+    }
+
+    /**
      * Compile LESS before concat.
      */
     grunt.registerTask("postUseminPrepare",
@@ -124,7 +162,6 @@ module.exports = function(grunt) {
         grunt.task.requires("useminPrepare");
 
         var config = grunt.config("postUseminPrepare");
-        var appConfig = grunt.config("app");
         var concatConfig = grunt.config("concat");
         var files = concatConfig
                 && concatConfig.generated
@@ -136,13 +173,13 @@ module.exports = function(grunt) {
 
         var lessConfig = {
             cmp: {
-                files: []
+                files: relocateConcat(files, lessExtRegex)
             }
         };
 
         var sassConfig = {
             cmp: {
-                files: []
+                files: relocateConcat(files, sassExtRegex)
             }
         };
 
@@ -154,35 +191,6 @@ module.exports = function(grunt) {
             sassConfig.cmp.options = {
                 loadPath: config.paths
             };
-        }
-
-        for (var i = 0; i < files.length; i++) {
-            for (var j = 0; j < files[i].src.length; j++) {
-                var isLess = lessExtRegex.test(files[i].src[j]);
-                var isSass = sassExtRegex.test(files[i].src[j]);
-                if (isLess || isSass) {
-                    var compiledFile = path.normalize(files[i].src[j])
-                            .split(path.sep);
-                    if (compiledFile.length > 0) {
-                        compiledFile[0] = appConfig.staging;
-                    }
-
-                    compiledFile = path.join.apply(null, compiledFile);
-
-                    var file = {
-                        src: [files[i].src[j]],
-                        dest: compiledFile
-                    };
-
-                    if (isLess) {
-                        lessConfig.cmp.files.push(file);
-                    } else if (isSass) {
-                        sassConfig.cmp.files.push(file);
-                    }
-
-                    files[i].src[j] = compiledFile;
-                }
-            }
         }
 
         grunt.config("less", lessConfig);
