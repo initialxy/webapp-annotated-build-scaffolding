@@ -1,6 +1,8 @@
 "use strict";
 var supportedCssPreprocessors = require("../modules/supportedCssPreprocessors");
 
+var defaultTask = "copy";
+
 function findTaskForFile( /* {dest: "", src: [""]} */ f) {
     for (var i = 0; i < f.src.length; i++) {
         for (var j = 0; j < supportedCssPreprocessors.length; j++) {
@@ -15,7 +17,7 @@ function findTaskForFile( /* {dest: "", src: [""]} */ f) {
         }
     }
 
-    return "copy";
+    return defaultTask;
 }
 
 /**
@@ -31,7 +33,7 @@ module.exports = function(grunt) {
 
         var config = this.data;
         var targetConfigs = {};
-        var targetTasks = ["copy"];
+        var targetTasks = [defaultTask];
 
         // Initialize all of the target configs that we are going to modify.
         supportedCssPreprocessors.forEach(function(s) {
