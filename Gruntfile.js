@@ -1,5 +1,6 @@
 "use strict";
 var path = require("path");
+var cssPrepareStep = require("./grunt_utils/modules/cssPrepareStep");
 
 module.exports = function(grunt) {
     /**
@@ -77,8 +78,8 @@ module.exports = function(grunt) {
                 staging: "<%= app.staging %>",
                 flow: {
                     steps: {
-                        'js': ['uglifyjs'],
-                        'css': ['concat', 'cssmin']
+                        "js": ["uglifyjs"],
+                        "css": [cssPrepareStep, "cssmin"]
                     },
                     post: {}
                 }
@@ -91,22 +92,14 @@ module.exports = function(grunt) {
             }
         },
         "uglify": {
-            generated: {
-                options: {
-                    preserveComments: "some"
-                }
+            options: {
+                preserveComments: "some"
             }
         },
         "cssmin": {
-            generated: {
-                options: {
-                    keepSpecialComments: "*"
-                }
+            options: {
+                keepSpecialComments: "*"
             }
-        },
-        "postUseminPrepare": {
-            staging: "<%= app.staging %>",
-            paths: ["<%= app.src %>/css"]
         },
         "htmlrefs": {
             cmp: {
@@ -119,17 +112,16 @@ module.exports = function(grunt) {
         }
     });
 
+    grunt.loadTasks("grunt_utils/tasks");
+
     grunt.loadNpmTasks("grunt-usemin");
     grunt.loadNpmTasks("grunt-contrib-copy");
-    grunt.loadNpmTasks("grunt-contrib-concat");
     grunt.loadNpmTasks("grunt-contrib-uglify");
     grunt.loadNpmTasks("grunt-contrib-less");
     grunt.loadNpmTasks("grunt-contrib-sass");
     grunt.loadNpmTasks("grunt-contrib-cssmin");
     grunt.loadNpmTasks("grunt-htmlrefs");
     grunt.loadNpmTasks("grunt-contrib-clean");
-
-    grunt.loadTasks("grunt_tasks");
 
     grunt.registerTask("dev", [
         "copy:dev"]);
@@ -138,10 +130,10 @@ module.exports = function(grunt) {
         "copy:html",
         "copy:assets",
         "useminPrepare",
-        "postUseminPrepare",
-        "less:cmp",
-        "sass:cmp",
-        "concat",
+        "cssPrepare:generated",
+        "copy:generated",
+        "less:generated",
+        "sass:generated",
         "uglify",
         "cssmin",
         "usemin",
