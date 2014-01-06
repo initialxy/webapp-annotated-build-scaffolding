@@ -119,12 +119,6 @@ module.exports = function(grunt) {
                     srcTask: "uglify",
                     srcTaskTarget: "genSourceMap"
                 }
-            },
-            cssSourceMap: {
-                options: {
-                    srcTask: "cssmin",
-                    srcTaskTarget: "genSourceMap"
-                }
             }
         },
         "htmlrefs": {
@@ -149,10 +143,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks("grunt-htmlrefs");
     grunt.loadNpmTasks("grunt-contrib-clean");
 
-    grunt.registerTask("dev", [
-        "copy:dev"]);
-
-    grunt.registerTask("cmp", [
+    grunt.registerTask("cssGen", [
         "copy:html",
         "copy:assets",
         "useminPrepare",
@@ -165,6 +156,7 @@ module.exports = function(grunt) {
         "uglify:generated",
         "cssmin:generated"]);
 
+    // Too bad there's no source map gen for CSS with grunt-contrib-cssmin.
     grunt.registerTask("minGenSourceMap", [
         "uglifyFilesToTarget:genSourceMap",
         "uglify:genSourceMap",
@@ -177,17 +169,30 @@ module.exports = function(grunt) {
         "htmlrefs:cmp",
         "clean:cmpPostBuild"]);
 
+    grunt.registerTask("build", [
+        "cssGen",
+        "min",
+        "finalize"
+    ]);
+
+    grunt.registerTask("buildGenSourceMap", [
+        "cssGen",
+        "minGenSourceMap",
+        "finalize"
+    ]);
+
+    /****************** Actual tasks you should use to build ******************/
+
+    grunt.registerTask("dev", [
+        "copy:dev"]);
+
     grunt.registerTask("prd", [
         "copy:prd",
-        "cmp",
-        "min",
-        "finalize"]);
+        "build"]);
 
     grunt.registerTask("qa", [
         "copy:qa",
-        "cmp",
-        "minGenSourceMap",
-        "finalize"]);
+        "buildGenSourceMap"]);
 
     grunt.registerTask("default", ["dev"]);
 }
