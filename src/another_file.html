@@ -4,11 +4,7 @@
         <title>Hello World!</title>
 
         <!--
-        cssmin and uglify are configured to not discart special comments. So you
-        can include raw versions of library files during development, then they
-        can be minified for production with their copyrights preserved, so that
-        you won't violate their licenses. Alternatively, you can use htmlrefs to
-        replace library files to their pre-minified versions.
+        All HTML files will get processed. Just add HTML files all you want.
         -->
 
         <!-- build:css css/libs.css -->
@@ -20,18 +16,9 @@
         <script src="../bower_components/bootstrap/dist/js/bootstrap.js"></script>
         <!-- endbuild -->
 
-        <!--
-        Any .less or .sass files will be automatically compiled.
-        -->
-
         <!-- build:css css/main.css -->
         <link rel="stylesheet/less" href="css/sample.less">
         <!-- endbuild -->
-
-        <!--
-        Source maps for all JavaScript files (including library files) will be
-        built for QA build. All the generation and linking are taken care of.
-        -->
 
         <!-- build:js js/main.js -->
         <script src="config/config.js"></script>
@@ -41,12 +28,6 @@
         <!-- build:js js/views/view.js -->
         <script src="js/views/home.js"></script>
         <!-- endbuild -->
-
-        <!--
-        htmlrefs is performed BEFORE useminPrepare. So you can use htmlrefs to
-        do some magic to influence usemin or perform htmlrefs features like
-        replaceing and/or removing tags for QA or production.
-        -->
 
         <!-- ref:remove -->
         <script type="text/javascript">var less=less||{};less.env='development';</script>
