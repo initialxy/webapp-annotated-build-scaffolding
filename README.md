@@ -82,7 +82,7 @@ If this is your first time playing with this scaffolding, please take a look at 
 
 Annotate JavaScript and CSS tags in your HTML files with [htmlrefs](https://github.com/tactivos/grunt-htmlrefs) and [usemin](https://github.com/yeoman/grunt-usemin) blocks.
 
-Open `Gruntfile.js` and edit `copy:assets`, `copy:dev`, `copy:prd`, `copy:qa` targets to your liking. (Feel free to add more build tasks. Scroll to the bottom of `Gruntfile.js` to see how current build tasks are registered. It should be pretty straightforward.)
+Open `Gruntfile.js` and edit `copy:assets`, `copy:dev`, `copy:qa`, `copy:prd` targets to your liking. (Feel free to add more build tasks. Scroll to the bottom of `Gruntfile.js` to see how current build tasks are registered. It should be pretty straightforward.)
 
 Now you can build your project with: `grunt dev`, `grunt qa` and `grunt prd`. Here are the differences between these tasks.
 

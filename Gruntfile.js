@@ -5,7 +5,7 @@ var sourceMapURLGen = require("./grunt_utils/modules/sourceMapURLGen");
 
 module.exports = function(grunt) {
     /**
-     * Feel free to configure app, copy:assets, copy:dev, copy:prd, copy:qa
+     * Feel free to configure app, copy:assets, copy:dev, copy:qa, copy:prd
      * targets. Only edit the others if you know what you are doing.
      */
     grunt.initConfig({
@@ -42,20 +42,20 @@ module.exports = function(grunt) {
                     }
                 ]
             },
-            prd: {
+            qa: {
                 files: [{
                         expand: true,
-                        cwd: "<%= app.src %>/build/config-prd",
+                        cwd: "<%= app.src %>/build/config-qa",
                         filter: "isFile",
                         src: ["**"],
                         dest: "<%= app.src %>/config"
                     }
                 ]
             },
-            qa: {
+            prd: {
                 files: [{
                         expand: true,
-                        cwd: "<%= app.src %>/build/config-qa",
+                        cwd: "<%= app.src %>/build/config-prd",
                         filter: "isFile",
                         src: ["**"],
                         dest: "<%= app.src %>/config"
