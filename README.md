@@ -86,7 +86,7 @@ Open `Gruntfile.js` and edit `copy:assets`, `copy:dev`, `copy:prd`, `copy:qa` ta
 
 Now you can build your project with: `grunt dev`, `grunt qa` and `grunt prd`. Here are the differences between these tasks.
 
-* `grunt dev` is very straightforward. It simply copies config file in your `src` directory. You are expected to develop from your `src` directory with everything in their raw form.
+* `grunt dev` is very straightforward. It simply copies development configs to your `src` directory. You are expected to develop from your `src` directory with everything in their raw form.
 * `grunt qa` copies QA configs to `dist` direcotry, then it compiles, minifies and generates JavaScript, CSS and HTML with JavaScript source maps. Everything inside `dist` directory is ready for distribution. (You should be able to just ZIP up `dist` directory and send it to QA.)
 * `grunt prd` copies production configs to `dist` directory. It is very similar to QA build, except it doesn't generate JavaScript source map. Again, `dist` directory is ready for distribution.
 
