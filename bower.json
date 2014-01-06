@@ -1,17 +1,17 @@
 {
-  "name": "grunt-webapp-less-scaffolding",
+  "name": "usemin-cssgen-scaffolding",
   "version": "0.0.1",
   "authors": [
     "Xingchen Yu (initialxy -at- gmail.com)"
   ],
-  "description": "test",
+  "description": "Grunt scaffolding for webapp built with CSS compilers.",
   "keywords": [
     "grunt",
     "webapp",
     "scaffolding"
   ],
   "license": "MIT",
-  "homepage": "https://github.com/initialxy/grunt-webapp-less-scaffolding",
+  "homepage": "https://github.com/initialxy/usemin-cssgen-scaffolding",
   "private": true,
   "ignore": [
     "**/.*",
