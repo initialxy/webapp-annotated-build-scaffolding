@@ -1,13 +1,13 @@
 "use strict";
 
 /**
- * Copies files from uglify:generated target to another target. This is needed
- * because usemin always generates files to generated target, but you may need
- * to use these files for other target configurations.
+ * Copies files config from uglify:generated target to another target. This is
+ * needed because usemin always generates files to generated target, but you may
+ * need to use these files for other target configurations.
  */
 module.exports = function(grunt) {
     grunt.registerMultiTask("uglifyFilesToTarget",
-            "Copies files from uglify:generated target to another target.",
+            "Copy files config from uglify:generated target to another target.",
             function() {
         grunt.task.requires("useminPrepare");
 
