@@ -4,7 +4,7 @@
   "authors": [
     "Xingchen Yu (initialxy -at- gmail.com)"
   ],
-  "description": "Grunt scaffold to build webapps by taking advantage of usemin. It is able to automatically build LESS and SASS to CSS. It is also capable of build and link JavaScript source map.",
+  "description": "Grunt scaffolding to build webapps with the ability to automatically compile LESS and SASS files to CSS and the option to generate JavaScript source maps with ease.",
   "keywords": [
     "grunt",
     "webapp",
