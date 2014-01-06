@@ -8,7 +8,7 @@
     "webapp",
     "scaffolding"
   ],
-  "license": "MIT",
+  "license": "BSD",
   "homepage": "https://github.com/initialxy/usemin-cssgen-scaffolding",
   "devDependencies": {
     "bower": "~1.2.8",

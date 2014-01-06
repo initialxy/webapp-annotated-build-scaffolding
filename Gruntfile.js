@@ -1,11 +1,3 @@
-/*!
- * usemin-cssgen-scaffolding
- * https://github.com/initialxy/usemin-cssgen-scaffolding
- *
- * Copyright (c) 2013 Xingchen Yu (initialxy -at- gmail.com)
- * Licensed under the MIT license.
- */
-
 "use strict";
 var cssPrepareStep = require("./grunt_utils/modules/cssPrepareStep");
 var sourceMapNameGen = require("./grunt_utils/modules/sourceMapNameGen");
@@ -130,12 +122,12 @@ module.exports = function(grunt) {
             }
         },
         "htmlrefs": {
-            cmp: {
+            build: {
                 src: ["<%= app.dist %>/**/*.html"],
             }
         },
         "clean": {
-            cmpPostBuild: ["<%= app.staging %>"],
+            postBuild: ["<%= app.staging %>"],
             clean: ["<%= app.dist %>", "<%= app.src %>/config"]
         }
     });
@@ -151,10 +143,13 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks("grunt-htmlrefs");
     grunt.loadNpmTasks("grunt-contrib-clean");
 
-    grunt.registerTask("cssGen", [
+    grunt.registerTask("prebuild", [
         "copy:html",
         "copy:assets",
-        "useminPrepare",
+        "htmlrefs:build",
+        "useminPrepare"]);
+
+    grunt.registerTask("cssGen", [
         "cssPrepare:generated",
         "copy:generated",
         "less:generated",
@@ -174,16 +169,17 @@ module.exports = function(grunt) {
 
     grunt.registerTask("finalize", [
         "usemin",
-        "htmlrefs:cmp",
-        "clean:cmpPostBuild"]);
+        "clean:postBuild"]);
 
     grunt.registerTask("build", [
+        "prebuild",
         "cssGen",
         "min",
         "finalize"
     ]);
 
     grunt.registerTask("buildGenSourceMap", [
+        "prebuild",
         "cssGen",
         "minGenSourceMap",
         "finalize"

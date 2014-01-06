@@ -1,11 +1,3 @@
-/*!
- * usemin-cssgen-scaffolding
- * https://github.com/initialxy/usemin-cssgen-scaffolding
- *
- * Copyright (c) 2013 Xingchen Yu (initialxy -at- gmail.com)
- * Licensed under the MIT license.
- */
-
 "use strict";
 
 module.exports = function(path, ext) {
