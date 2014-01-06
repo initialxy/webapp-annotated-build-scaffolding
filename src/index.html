@@ -1,37 +1,60 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Test</title>
+        <title>Hello World!</title>
+
+        <!--
+        cssmin and uglify are configured to not discart special comments. So you
+        can include full versions of library files during development, then they
+        can be minified for production with their copyrights preserved, so that
+        you won't violate their licenses.
+        -->
+
         <!-- build:css css/libs.css -->
         <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.css">
         <!-- endbuild -->
-
-        <!-- build:css css/main.css -->
-        <link rel="stylesheet/less" href="css/test.less">
-        <!-- endbuild -->
-    </head>
-    <body>
-        <div>
-            Hello World!
-        </div>
 
         <!-- build:js js/libs.js -->
         <script src="../bower_components/jquery/jquery.js"></script>
         <script src="../bower_components/bootstrap/dist/js/bootstrap.js"></script>
         <!-- endbuild -->
 
-        <!-- ref:remove -->
-        <script type="text/javascript">var less=less||{};less.env='development';</script>
-        <script src="../bower_components/less/dist/less-1.5.1.min.js"></script>
-        <!-- endref -->
+        <!--
+        Any .less or .sass files will be automatically compiled.
+        -->
+
+        <!-- build:css css/main.css -->
+        <link rel="stylesheet/less" href="css/sample.less">
+        <!-- endbuild -->
+
+        <!--
+        Source maps for all JavaScript files (including library files) will be
+        built for QA build. All the generation and linking are taken care of.
+        -->
 
         <!-- build:js js/main.js -->
         <script src="config/config.js"></script>
-        <script src="js/test.js"></script>
+        <script src="js/sample.js"></script>
         <!-- endbuild -->
 
         <!-- build:js js/views/view.js -->
         <script src="js/views/home.js"></script>
         <!-- endbuild -->
+
+        <!--
+        htmlrefs is performed BEFORE useminPrepare. So you can use htmlrefs to
+        do some magic to influence usemin or perform htmlrefs features like
+        replaceing and/or removing tags for QA or production.
+        -->
+
+        <!-- ref:remove -->
+        <script type="text/javascript">var less=less||{};less.env='development';</script>
+        <script src="../bower_components/less/dist/less-1.5.1.min.js"></script>
+        <!-- endref -->
+    </head>
+    <body>
+        <div>
+            Hello World!
+        </div>
     </body>
 </html>
