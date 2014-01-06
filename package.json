@@ -1,7 +1,7 @@
 {
   "name": "usemin-cssgen-scaffolding",
   "version": "0.0.1",
-  "description": "Grunt scaffolding for webapp built with CSS compilers.",
+  "description": "Grunt scaffold to build webapps by taking advantage of usemin. It is able to automatically build LESS and SASS to CSS. It is also capable of build and link JavaScript source map.",
   "author": "Xingchen Yu (initialxy -at- gmail.com)",
   "keywords": [
     "grunt",
