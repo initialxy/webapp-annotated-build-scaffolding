@@ -1,18 +1,8 @@
 "use strict";
 var path = require("path");
+var changeExt = require("./changeExt");
 
 exports.name = "cssPrepare";
-
-function changeExt(path, ext) {
-    var result = path;
-    var lastDotIndex = result.lastIndexOf(".");
-
-    if (lastDotIndex > -1) {
-        result = result.substring(0, lastDotIndex + 1) + ext;
-    }
-
-    return result;
-}
 
 /**
  * This is a usemin step to help separate CSS preprocessor generated files.

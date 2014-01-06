@@ -1,6 +1,7 @@
 "use strict";
-var path = require("path");
 var cssPrepareStep = require("./grunt_utils/modules/cssPrepareStep");
+var sourceMapNameGen = require("./grunt_utils/modules/sourceMapNameGen");
+var sourceMapURLGen = require("./grunt_utils/modules/sourceMapURLGen");
 
 module.exports = function(grunt) {
     /**
@@ -91,14 +92,39 @@ module.exports = function(grunt) {
                 assetsDirs: ["<%= app.dist %>"]
             }
         },
+        "uglifyFilesToTarget": {
+            genSourceMap: {}
+        },
         "uglify": {
             options: {
                 preserveComments: "some"
+            },
+            genSourceMap: {
+                options: {
+                    // Due to the way uglify works, source path is pretty messed
+                    // up. Please keep that in mind.
+                    sourceMap: sourceMapNameGen,
+                    sourceMappingURL: sourceMapURLGen
+                }
             }
         },
         "cssmin": {
             options: {
                 keepSpecialComments: "*"
+            }
+        },
+        "sourceCopyPrepare": {
+            jsSourceMap: {
+                options: {
+                    srcTask: "uglify",
+                    srcTaskTarget: "genSourceMap"
+                }
+            },
+            cssSourceMap: {
+                options: {
+                    srcTask: "cssmin",
+                    srcTaskTarget: "genSourceMap"
+                }
             }
         },
         "htmlrefs": {
@@ -133,20 +159,35 @@ module.exports = function(grunt) {
         "cssPrepare:generated",
         "copy:generated",
         "less:generated",
-        "sass:generated",
-        "uglify",
-        "cssmin",
+        "sass:generated"]);
+
+    grunt.registerTask("min", [
+        "uglify:generated",
+        "cssmin:generated"]);
+
+    grunt.registerTask("minGenSourceMap", [
+        "uglifyFilesToTarget:genSourceMap",
+        "uglify:genSourceMap",
+        "cssmin:generated",
+        "sourceCopyPrepare:jsSourceMap",
+        "copy:jsSourceMap"]);
+
+    grunt.registerTask("finalize", [
         "usemin",
         "htmlrefs:cmp",
         "clean:cmpPostBuild"]);
 
     grunt.registerTask("prd", [
         "copy:prd",
-        "cmp"]);
+        "cmp",
+        "min",
+        "finalize"]);
 
     grunt.registerTask("qa", [
         "copy:qa",
-        "cmp"]);
+        "cmp",
+        "minGenSourceMap",
+        "finalize"]);
 
     grunt.registerTask("default", ["dev"]);
 }

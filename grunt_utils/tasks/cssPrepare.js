@@ -27,7 +27,7 @@ function findTaskForFile( /* {dest: "", src: [""]} */ f) {
  */
 module.exports = function(grunt) {
     grunt.registerMultiTask("cssPrepare",
-            "Task to be run before less and concat.",
+            "Creates CSS preprocessor configs.",
             function() {
         grunt.task.requires("useminPrepare");
 
