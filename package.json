@@ -1,6 +1,6 @@
 {
   "name": "usemin-cssgen-scaffolding",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Grunt scaffolding to build webapps with the ability to automatically compile LESS and SASS files to CSS and the option to generate JavaScript source maps with ease.",
   "author": "Xingchen Yu (initialxy -at- gmail.com)",
   "keywords": [
