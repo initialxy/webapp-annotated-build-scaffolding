@@ -72,9 +72,10 @@ module.exports = function(grunt) {
                 ]
             }
         },
-        "useminPrepare": {
+        "useminPreparePrepare": {
             html: "<%= app.src %>/**/*.html",
             options: {
+                src: "<%= app.src %>",
                 dest: "<%= app.dist %>",
                 staging: "<%= app.staging %>",
                 flow: {
@@ -123,7 +124,7 @@ module.exports = function(grunt) {
         },
         "htmlrefs": {
             build: {
-                src: ["<%= app.dist %>/**/*.html"],
+                src: ["<%= app.dist %>/**/*.html"]
             }
         },
         "clean": {
@@ -147,6 +148,7 @@ module.exports = function(grunt) {
         "copy:html",
         "copy:assets",
         "htmlrefs:build",
+        "useminPreparePrepare",
         "useminPrepare"]);
 
     grunt.registerTask("cssGen", [

@@ -1,7 +1,7 @@
 usemin-cssgen-scaffolding
 =========================
 
-[Grunt](http://gruntjs.com/) scaffolding to build webapps with the ability to automatically compile LESS and SASS files to CSS and the option to generate JavaScript source maps with ease. It is heavily inspired by [Yoeman](http://yeoman.io/)'s [generator-webapp](https://github.com/yeoman/generator-webapp). I really liked the concept of [grunt-usemin](https://github.com/yeoman/grunt-usemin), but I'm extremely [OCD](http://en.wikipedia.org/wiki/Obsessive%E2%80%93compulsive_disorder) about the exact things that I want. So I started building a scaffolding for myself.
+[Grunt](http://gruntjs.com/) scaffolding to build webapps with the ability to automatically compile LESS and SASS files to CSS and the option to generate JavaScript source maps with ease. It is heavily inspired by [Yoeman](http://yeoman.io/)'s [generator-webapp](https://github.com/yeoman/generator-webapp). I really liked the concept of [grunt-usemin](https://github.com/yeoman/grunt-usemin), but I'm extremely obsessed with the exact things that I want. So I started building a scaffolding for myself.
 
 The purpose behind this scaffolding is similar to [generator-webapp](https://github.com/yeoman/generator-webapp). That is you can write HTML files, which link raw JavaScript and CSS files for development. Then you can use [Grunt](http://gruntjs.com/) to process the same HTML files to generate and minify JavaScript and CSS files that are linked. Finally, new HTML files will be generated to link these minified JavaScript and CSS files.
 
@@ -10,7 +10,7 @@ Key Features
 
 * Any `.less` or `.sass` files will be automatically compiled to CSS.
 * QA build can generate JavaScript source map.
-* All `.html` files under `src` folder will be processed.
+* All `.html` files under `src` folder will be processed and relative path will be resolved correctly. (There's a workaround implemented to address [this issue](https://github.com/yeoman/grunt-usemin/issues/184).)
 * Special commments (copyright statements) will be preserved. So feel free to link raw versions of library files for development. They will be minified with their copyrights attached for production.
 * [htmlrefs](https://github.com/tactivos/grunt-htmlrefs) is ran ahead of time, so you can perform even more magic.
 * The build is designed to be generic enough such that you are allowed to setup your project in any structure you like. All the magic happens when you enclose contents in your HTML with [htmlrefs](https://github.com/tactivos/grunt-htmlrefs) and [usemin](https://github.com/yeoman/grunt-usemin) blocks.

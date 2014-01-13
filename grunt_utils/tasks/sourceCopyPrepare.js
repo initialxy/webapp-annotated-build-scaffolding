@@ -9,14 +9,15 @@ module.exports = function(grunt) {
             "Prepare copy task to copy source files for source map to link",
             function() {
         var config = this.data;
-        var srcConfig = grunt.config(config.options.srcTask);
+        var options = this.options();
+        var srcConfig = grunt.config(options.srcTask);
         var copyConfig = grunt.config("copy") || {};
         var files = null;
 
         if (srcConfig) {
-            if (config.options.srcTaskTarget) {
-                files = srcConfig[config.options.srcTaskTarget]
-                        && srcConfig[config.options.srcTaskTarget].files
+            if (options.srcTaskTarget) {
+                files = srcConfig[options.srcTaskTarget]
+                        && srcConfig[options.srcTaskTarget].files
             } else {
                 files = srcConfig.files;
             }
