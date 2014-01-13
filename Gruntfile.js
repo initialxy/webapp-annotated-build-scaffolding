@@ -1,7 +1,9 @@
 "use strict";
+var path = require("path");
 var cssPrepareStep = require("./grunt_utils/modules/cssPrepareStep");
 var sourceMapNameGen = require("./grunt_utils/modules/sourceMapNameGen");
 var sourceMapURLGen = require("./grunt_utils/modules/sourceMapURLGen");
+var replaceSuffix = require("./grunt_utils/modules/replaceSuffix");
 
 module.exports = function(grunt) {
     /**
@@ -62,18 +64,42 @@ module.exports = function(grunt) {
                     }
                 ]
             },
-            html: {
+            htmlrefs: {
                 files: [{
                         expand: true,
                         cwd: "<%= app.src %>",
                         src: ["**/*.html"],
-                        dest: "<%= app.dist %>"
+                        dest: "<%= app.src %>",
+                        rename: function(dest, src) {
+                            return path.join(
+                                    dest,
+                                    replaceSuffix(src, ".html", ".htmlrefs.html"));
+                        }
+                    }
+                ]
+            },
+            html: {
+                files: [{
+                        expand: true,
+                        cwd: "<%= app.src %>",
+                        src: ["**/*.htmlrefs.html"],
+                        dest: "<%= app.dist %>",
+                        rename: function(dest, src) {
+                            return path.join(
+                                    dest,
+                                    replaceSuffix(src, ".htmlrefs.html", ".html"));
+                        }
                     }
                 ]
             }
         },
+        "htmlrefs": {
+            build: {
+                src: ["<%= app.src %>/**/*.htmlrefs.html"]
+            }
+        },
         "useminPreparePrepare": {
-            html: "<%= app.src %>/**/*.html",
+            html: "<%= app.src %>/**/*.htmlrefs.html",
             options: {
                 src: "<%= app.src %>",
                 dest: "<%= app.dist %>",
@@ -122,13 +148,8 @@ module.exports = function(grunt) {
                 }
             }
         },
-        "htmlrefs": {
-            build: {
-                src: ["<%= app.dist %>/**/*.html"]
-            }
-        },
         "clean": {
-            postBuild: ["<%= app.staging %>"],
+            postBuild: ["<%= app.staging %>", "<%= app.src %>/**/*.htmlrefs.html"],
             clean: ["<%= app.dist %>", "<%= app.src %>/config"]
         }
     });
@@ -145,9 +166,10 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks("grunt-contrib-clean");
 
     grunt.registerTask("prebuild", [
+        "copy:htmlrefs",
+        "htmlrefs:build",
         "copy:html",
         "copy:assets",
-        "htmlrefs:build",
         "useminPreparePrepare",
         "useminPrepare"]);
 
