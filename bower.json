@@ -1,17 +1,17 @@
 {
-  "name": "usemin-cssgen-scaffolding",
+  "name": "webapp-annotated-build-scaffolding",
   "version": "0.0.3",
   "authors": [
     "Xingchen Yu (initialxy -at- gmail.com)"
   ],
-  "description": "Grunt scaffolding to build webapps with the ability to automatically compile LESS and SASS files to CSS and the option to generate JavaScript source maps with ease.",
+  "description": "Grunt scaffolding to build LESS, SASS, JavaScript source maps, AMD and CommonJS for web apps based on annotated HTML.",
   "keywords": [
     "grunt",
     "webapp",
     "scaffolding"
   ],
   "license": "BSD",
-  "homepage": "https://github.com/initialxy/usemin-cssgen-scaffolding",
+  "homepage": "https://github.com/initialxy/webapp-annotated-build-scaffolding",
   "private": true,
   "ignore": [
     "**/.*",
