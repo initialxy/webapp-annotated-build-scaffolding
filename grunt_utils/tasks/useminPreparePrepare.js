@@ -50,7 +50,7 @@ module.exports = function(grunt) {
         var src = this.target === "html" ? this.data: this.data.src;
         var options = this.options();
         var srcDir = options.src || "src";
-        var destDir = options.dest || "dest";
+        var destDir = options.dest || srcDir;
         var stagingDir = options.staging || ".tmp";
 
         var useminPrepareConfig = {};
@@ -70,12 +70,15 @@ module.exports = function(grunt) {
         }
 
         pathGroups.forEach(function(g) {
-            useminPrepareConfig[g.dir] = {src: g.paths};
-            useminPrepareConfig[g.dir].options = {};
+            var target = "target-" + g.dir.replace(
+                    new RegExp(path.sep.replace(/[\\\/]/g, "\\$&"), "g"),
+                    "-");
+            useminPrepareConfig[target] = {src: g.paths};
+            useminPrepareConfig[target].options = {};
 
             var strippedDir = stripPrefixDir(g.dir, srcDir);
-            useminPrepareConfig[g.dir].options.staging = path.join(stagingDir, strippedDir);
-            useminPrepareConfig[g.dir].options.dest = path.join(destDir, strippedDir);
+            useminPrepareConfig[target].options.staging = path.join(stagingDir, strippedDir);
+            useminPrepareConfig[target].options.dest = path.join(destDir, strippedDir);
         });
 
         useminPrepareConfig.options = options;
