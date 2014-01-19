@@ -53,9 +53,11 @@ module.exports = function(grunt) {
 
         // Copy supported CSS preprocessor files to its preprocessor task
         // config, otherwise copy to copy task config
-        config.files.forEach(function(f) {
-            targetConfigs[findTaskForFile(f)].generated.files.push(f);
-        });
+        if (config.files) {
+            config.files.forEach(function(f) {
+                targetConfigs[findTaskForFile(f)].generated.files.push(f);
+            });
+        }
 
         Object.keys(targetConfigs).forEach(function(k) {
             if (targetConfigs.hasOwnProperty(k)) {

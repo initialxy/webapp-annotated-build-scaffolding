@@ -1,6 +1,7 @@
 "use strict";
 var path = require("path");
 var cssPrepareStep = require("./grunt_utils/modules/cssPrepareStep");
+var requirejsPrepareStep = require("./grunt_utils/modules/requirejsPrepareStep");
 var sourceMapNameGen = require("./grunt_utils/modules/sourceMapNameGen");
 var sourceMapURLGen = require("./grunt_utils/modules/sourceMapURLGen");
 var replaceSuffix = require("./grunt_utils/modules/replaceSuffix");
@@ -91,7 +92,8 @@ module.exports = function(grunt) {
                         }
                     }
                 ]
-            }
+            },
+            jsSourceMap: {}
         },
         "htmlrefs": {
             build: {
@@ -107,11 +109,15 @@ module.exports = function(grunt) {
                 flow: {
                     steps: {
                         "js": ["uglifyjs"],
-                        "css": [cssPrepareStep, "cssmin"]
+                        "css": [cssPrepareStep, "cssmin"],
+                        "amd": [requirejsPrepareStep, "uglifyjs"]
                     },
                     post: {}
                 }
             }
+        },
+        "requirejsPrepare": {
+            generated: {}
         },
         "usemin": {
             html: ["<%= app.dist %>/**/*.html"],
@@ -135,7 +141,11 @@ module.exports = function(grunt) {
                 }
             }
         },
+        "cssPrepare": {
+            generated: {}
+        },
         "cssmin": {
+            generated: {},
             options: {
                 keepSpecialComments: "*"
             }
@@ -164,6 +174,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks("grunt-contrib-cssmin");
     grunt.loadNpmTasks("grunt-htmlrefs");
     grunt.loadNpmTasks("grunt-contrib-clean");
+    grunt.loadNpmTasks('grunt-contrib-requirejs');
 
     grunt.registerTask("prebuild", [
         "copy:htmlrefs",
@@ -172,6 +183,10 @@ module.exports = function(grunt) {
         "copy:assets",
         "useminPreparePrepare",
         "useminPrepare"]);
+
+    grunt.registerTask("amdGen", [
+        "requirejsPrepare"
+    ]);
 
     grunt.registerTask("cssGen", [
         "cssPrepare:generated",
@@ -197,6 +212,7 @@ module.exports = function(grunt) {
 
     grunt.registerTask("build", [
         "prebuild",
+        "amdGen",
         "cssGen",
         "min",
         "finalize"
@@ -204,6 +220,7 @@ module.exports = function(grunt) {
 
     grunt.registerTask("buildGenSourceMap", [
         "prebuild",
+        "amdGen",
         "cssGen",
         "minGenSourceMap",
         "finalize"
@@ -215,10 +232,12 @@ module.exports = function(grunt) {
         "copy:dev"]);
 
     grunt.registerTask("prd", [
+        "clean",
         "copy:prd",
         "build"]);
 
     grunt.registerTask("qa", [
+        "clean",
         "copy:qa",
         "buildGenSourceMap"]);
 
