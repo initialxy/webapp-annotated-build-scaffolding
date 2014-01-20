@@ -22,6 +22,7 @@ module.exports = function(grunt) {
         grunt.task.requires("useminPrepare");
 
         var config = this.data || {};
+        var options = this.options() || {};
         var requirejsConfigs = null;
 
         var files = config.files;
@@ -48,14 +49,22 @@ module.exports = function(grunt) {
                         requirejsConfigs = {};
                     }
 
+                    if (!options.baseUrl) {
+                        options.baseUrl = baseUrl;
+                    }
+                    if (!options.mainConfigFile) {
+                        options.mainConfigFile = requirejsConfig;
+                    }
+                    if (!options.name) {
+                        options.name = removeExt(
+                                path.relative(baseUrl, requirejsMain));
+                    }
+                    if (!options.out) {
+                        options.out = f.dest;
+                    }
+
                     requirejsConfigs[target] = {};
-                    requirejsConfigs[target].options = {};
-                    requirejsConfigs[target].options.baseUrl = baseUrl;
-                    requirejsConfigs[target].options.mainConfigFile = requirejsConfig;
-                    requirejsConfigs[target].options.name = removeExt(
-                            path.relative(baseUrl, requirejsMain), ".js", "");
-                    requirejsConfigs[target].options.out = f.dest;
-                    requirejsConfigs[target].options.optimize = "none";
+                    requirejsConfigs[target].options = options;
                 }
             });
         }
