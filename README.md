@@ -12,7 +12,7 @@ Key Features
 * All `.html` files under `src` folder will be processed and relative path will be resolved correctly. (There's a workaround implemented to address [this issue](https://github.com/yeoman/grunt-usemin/issues/184).)
 * Special commments (copyright statements) will be preserved. So feel free to link raw versions of library files for development. They will be minified with their copyrights attached for production.
 * Any `.less` or `.sass` files will be automatically compiled to CSS.
-* QA build can generate JavaScript source map.
+* QA build generates JavaScript source map and all the annoying configs are taken care of for you.
 * [htmlrefs](https://github.com/tactivos/grunt-htmlrefs) is ran ahead of time, so you can perform even more magic.
 * Build AMD modules and dependencies with [RequireJS Optimizer](http://requirejs.org/docs/optimization.html).
 * Build CommonJS modules and dependencies with [Browserify](http://browserify.org/) (under development).
