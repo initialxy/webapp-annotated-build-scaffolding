@@ -8,12 +8,12 @@ The purpose behind this scaffolding is similar to [generator-webapp](https://git
 Key Features
 ------------
 
-* Any `.less` or `.sass` files will be automatically compiled to CSS.
-* QA build can generate JavaScript source map.
+* The build is designed to be generic enough such that you are allowed to setup your project in any structure you like. All the magic happens when you enclose contents in your HTML with [htmlrefs](https://github.com/tactivos/grunt-htmlrefs) and [usemin](https://github.com/yeoman/grunt-usemin) blocks.
 * All `.html` files under `src` folder will be processed and relative path will be resolved correctly. (There's a workaround implemented to address [this issue](https://github.com/yeoman/grunt-usemin/issues/184).)
 * Special commments (copyright statements) will be preserved. So feel free to link raw versions of library files for development. They will be minified with their copyrights attached for production.
+* Any `.less` or `.sass` files will be automatically compiled to CSS.
+* QA build can generate JavaScript source map.
 * [htmlrefs](https://github.com/tactivos/grunt-htmlrefs) is ran ahead of time, so you can perform even more magic.
-* The build is designed to be generic enough such that you are allowed to setup your project in any structure you like. All the magic happens when you enclose contents in your HTML with [htmlrefs](https://github.com/tactivos/grunt-htmlrefs) and [usemin](https://github.com/yeoman/grunt-usemin) blocks.
 * Build AMD modules and dependencies with [RequireJS Optimizer](http://requirejs.org/docs/optimization.html).
 * Build CommonJS modules and dependencies with [Browserify](http://browserify.org/) (under development).
 
@@ -41,10 +41,6 @@ Given the following HTML:
 <script src="js/sample.js"></script>
 <!-- endbuild -->
 
-<!-- build:js js/views/view.js -->
-<script src="js/views/home.js"></script>
-<!-- endbuild -->
-
 <!-- ref:remove -->
 <script type="text/javascript">var less=less||{};less.env='development';</script>
 <script src="../bower_components/less/dist/less-1.5.1.min.js"></script>
@@ -61,12 +57,29 @@ It will be built to the following:
 <link rel="stylesheet" href="css/main.css"/>
 
 <script src="js/main.js"></script>
-
-<script src="js/views/view.js"></script>
-
 ```
 
-Take a look at `src/index.html` for more details. Please note that everything under `src` directory serves entirely as samples. They don't actually serve any purposes as scaffolding. Please feel free to delete them.
+Take a look at `src/index.html` for more details.
+
+To build AMD modules. Simply use a special usemin build, `amd`.
+
+```html
+<!-- build:amd js/amd/amd.js -->
+<!-- ref:js js/amd/main.js -->
+<script src="../bower_components/requirejs/require.js" data-main="js/amd/main"></script>
+<!-- endref -->
+<!-- endbuild -->
+```
+
+It will be built to the following:
+
+```html
+<script src="js/amd/amd.js"></script>
+```
+
+You can see that in the above example, it uses nested `htmlrefs` ahead of usemin to perform magic. For more details, please see `src/amd.html`.
+
+Please note that everything under `src` directory serves entirely as samples. They don't actually serve any purposes as scaffolding. Please feel free to delete them.
 
 Getting Started
 ---------------
@@ -79,7 +92,7 @@ git clone https://github.com/initialxy/webapp-annotated-build-scaffolding.git
 
 The choice is yours.
 
-Remember to change infomation in `package.json` and `bower.json` to yours.
+Remember to change infomation in `package.json` and `bower.json` to yours. You probably don't want to remove any dependencies from `package.json` unless you really know what you are doing. But feel free to change all the dependencies in `bower.json`, which serves purely as example.
 
 Run:
 
