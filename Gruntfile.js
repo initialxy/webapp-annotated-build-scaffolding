@@ -129,7 +129,7 @@ module.exports = function(grunt) {
                 options: {
                     optimize: "none",
                     paths: {
-                        requireLib: "bower_components/requirejs/require"
+                        requireLib: "bower_components/almond/almond"
                     },
                     include: "requireLib"
                 }
