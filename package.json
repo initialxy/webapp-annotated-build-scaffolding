@@ -1,6 +1,6 @@
 {
   "name": "webapp-annotated-build-scaffolding",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Grunt scaffolding to build LESS, SASS, JavaScript source maps, AMD and CommonJS for web apps based on annotated HTML.",
   "author": "Xingchen Yu (initialxy -at- gmail.com)",
   "keywords": [
