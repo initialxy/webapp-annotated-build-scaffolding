@@ -63,6 +63,16 @@ module.exports = function(grunt) {
                         options.out = f.dest;
                     }
 
+                    if (options.paths) {
+                        Object.keys(options.paths).forEach(function(k) {
+                            if(options.paths.hasOwnProperty(k)) {
+                                options.paths[k] = path.relative(
+                                        options.baseUrl,
+                                        options.paths[k]);
+                            }
+                        });
+                    }
+
                     requirejsConfigs[target] = {};
                     requirejsConfigs[target].options = options;
                 }

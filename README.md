@@ -14,7 +14,7 @@ Key Features
 * Special commments (copyright statements) will be preserved. So feel free to link raw versions of library files for development. They will be minified with their copyrights attached for production.
 * [htmlrefs](https://github.com/tactivos/grunt-htmlrefs) is ran ahead of time, so you can perform even more magic.
 * The build is designed to be generic enough such that you are allowed to setup your project in any structure you like. All the magic happens when you enclose contents in your HTML with [htmlrefs](https://github.com/tactivos/grunt-htmlrefs) and [usemin](https://github.com/yeoman/grunt-usemin) blocks.
-* Build AMD modules and dependencies with [RequireJS Optimizer](http://requirejs.org/docs/optimization.html) (under development).
+* Build AMD modules and dependencies with [RequireJS Optimizer](http://requirejs.org/docs/optimization.html).
 * Build CommonJS modules and dependencies with [Browserify](http://browserify.org/) (under development).
 
 Samples
