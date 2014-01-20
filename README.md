@@ -61,7 +61,7 @@ It will be built to the following:
 
 Take a look at `src/index.html` for more details.
 
-To build AMD modules. Simply use a special usemin build, `amd`.
+To build AMD modules. Simply use a special `amd` build type.
 
 ```html
 <!-- build:amd js/amd/amd.js -->
@@ -77,7 +77,7 @@ It will be built to the following:
 <script src="js/amd/amd.js"></script>
 ```
 
-You can see that in the above example, it uses nested `htmlrefs` ahead of usemin to perform magic. For more details, please see `src/amd.html`.
+You can see that in the above example, it uses nested `htmlrefs` ahead of usemin to perform magic. For more details, please see `src/amd1.html` and `src/amd2.html`.
 
 Please note that everything under `src` directory serves entirely as samples. They don't actually serve any purposes as scaffolding. Please feel free to delete them.
 

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Hello AMD!</title>
+
+        <!--
+        To build AMD, you just need to wrap your main file with a special amd
+        build type. However keep in mind that there should be at most two files
+        in the build:amd block. If one file is given, the same file will be used
+        for both mainConfigFile and name properties. If two files are given, the
+        first file will be used for mainConfigFile and second file will be used
+        for name property. Any excessive files will be ignored. Note that this
+        build is smart enough to parse baseUrl out of config file to be used for
+        RequireJS Optimizer build. If baseUrl is not defined in config file,
+        path to main file will be used as baseUrl. Please see amd2.html to see
+        an alternative setup.
+        -->
+
+        <!-- build:amd js/amd/amd1.js -->
+        <!-- ref:js js/amd/main.js -->
+        <script src="../bower_components/requirejs/require.js" data-main="js/amd/main"></script>
+        <!-- endref -->
+        <!-- endbuild -->
+    </head>
+    <body>
+        <div>
+            Hello AMD!
+        </div>
+    </body>
+</html>

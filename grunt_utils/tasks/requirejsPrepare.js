@@ -3,12 +3,22 @@ var path = require("path");
 var fs = require("fs");
 var removeExt = require("../modules/removeExt");
 
+/**
+ * Parse baseUrl out of config file.
+ */
 function parseBaseUrl(/* "" */ path) {
     var data = fs.readFileSync(path, "utf8");
 
     var m = data && /(^|\s)require\.config\s*\(\s*\{([\s\S]*?)\}\s*\)/.exec(data);
     m = m && /(^|\s)baseUrl\s*\:\s*['"]([^'"]*?)['"]/.exec(m[2]);
     return m && m[2];
+}
+
+/**
+ * Quick and dirty way to perform a deep copy.
+ */
+function clone(a) {
+   return JSON.parse(JSON.stringify(a));
 }
 
 /**
@@ -49,32 +59,36 @@ module.exports = function(grunt) {
                         requirejsConfigs = {};
                     }
 
-                    if (!options.baseUrl) {
-                        options.baseUrl = baseUrl;
+                    requirejsConfigs[target] = {};
+                    // Make sure we perform a deep copy of options, because
+                    // there could be multiple AMD blocks and we don't want
+                    // previous run to carry data to the next one.
+                    requirejsConfigs[target].options = clone(options);
+                    var optionsClone = requirejsConfigs[target].options;
+
+                    if (!optionsClone.baseUrl) {
+                        optionsClone.baseUrl = baseUrl;
                     }
-                    if (!options.mainConfigFile) {
-                        options.mainConfigFile = requirejsConfig;
+                    if (!optionsClone.mainConfigFile) {
+                        optionsClone.mainConfigFile = requirejsConfig;
                     }
-                    if (!options.name) {
-                        options.name = removeExt(
+                    if (!optionsClone.name) {
+                        optionsClone.name = removeExt(
                                 path.relative(baseUrl, requirejsMain));
                     }
-                    if (!options.out) {
-                        options.out = f.dest;
+                    if (!optionsClone.out) {
+                        optionsClone.out = f.dest;
                     }
 
-                    if (options.paths) {
-                        Object.keys(options.paths).forEach(function(k) {
-                            if(options.paths.hasOwnProperty(k)) {
-                                options.paths[k] = path.relative(
-                                        options.baseUrl,
-                                        options.paths[k]);
+                    if (optionsClone.paths) {
+                        Object.keys(optionsClone.paths).forEach(function(k) {
+                            if(optionsClone.paths.hasOwnProperty(k)) {
+                                optionsClone.paths[k] = path.relative(
+                                        optionsClone.baseUrl,
+                                        optionsClone.paths[k]);
                             }
                         });
                     }
-
-                    requirejsConfigs[target] = {};
-                    requirejsConfigs[target].options = options;
                 }
             });
         }
