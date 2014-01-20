@@ -119,6 +119,10 @@ module.exports = function(grunt) {
         "requirejsPrepare": {
             generated: {}
         },
+        "replaceUseminType": {
+            generated: {
+            }
+        },
         "usemin": {
             html: ["<%= app.dist %>/**/*.html"],
             options: {
@@ -174,7 +178,6 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks("grunt-contrib-cssmin");
     grunt.loadNpmTasks("grunt-htmlrefs");
     grunt.loadNpmTasks("grunt-contrib-clean");
-    grunt.loadNpmTasks('grunt-contrib-requirejs');
 
     grunt.registerTask("prebuild", [
         "copy:htmlrefs",
@@ -185,7 +188,7 @@ module.exports = function(grunt) {
         "useminPrepare"]);
 
     grunt.registerTask("amdGen", [
-        "requirejsPrepare"
+        "requirejsPrepare:generated"
     ]);
 
     grunt.registerTask("cssGen", [
@@ -207,6 +210,7 @@ module.exports = function(grunt) {
         "copy:jsSourceMap"]);
 
     grunt.registerTask("finalize", [
+        "replaceUseminType:generated",
         "usemin",
         "clean:postBuild"]);
 

@@ -22,7 +22,7 @@ module.exports = function(grunt) {
         grunt.task.requires("useminPrepare");
 
         var config = this.data || {};
-        var targetConfigs = null;
+        var requirejsConfigs = null;
 
         var files = config.files;
 
@@ -42,30 +42,50 @@ module.exports = function(grunt) {
                         baseUrl = path.dirname(requirejsMain);
                     }
 
-                    var target = "target-" + requirejsMain.replace(
-                            new RegExp(path.sep.replace(/[\\\/]/g, "\\$&"), "g"),
-                            "-");
+                    var target = "target-" + requirejsMain;
                     
-                    if (!targetConfigs) {
-                        targetConfigs = {};
+                    if (!requirejsConfigs) {
+                        requirejsConfigs = {};
                     }
 
-                    targetConfigs[target] = {};
-                    targetConfigs[target].options = {};
-                    targetConfigs[target].options.baseUrl = baseUrl;
-                    targetConfigs[target].options.mainConfigFile = requirejsConfig;
-                    targetConfigs[target].options.name = removeExt(
+                    requirejsConfigs[target] = {};
+                    requirejsConfigs[target].options = {};
+                    requirejsConfigs[target].options.baseUrl = baseUrl;
+                    requirejsConfigs[target].options.mainConfigFile = requirejsConfig;
+                    requirejsConfigs[target].options.name = removeExt(
                             path.relative(baseUrl, requirejsMain), ".js", "");
-                    targetConfigs[target].options.out = f.dest;
-                    targetConfigs[target].options.optimize = "none";
+                    requirejsConfigs[target].options.out = f.dest;
+                    requirejsConfigs[target].options.optimize = "none";
                 }
             });
         }
 
-        if (targetConfigs) {
-            grunt.config("requirejs", targetConfigs);
+        if (requirejsConfigs) {
+            grunt.loadNpmTasks('grunt-contrib-requirejs');
+
+            grunt.config("requirejs", requirejsConfigs);
             grunt.log.writeln("requirejs configs is now:");
-            grunt.log.writeln(JSON.stringify(targetConfigs, null, 4));
+            grunt.log.writeln(JSON.stringify(requirejsConfigs, null, 4));
+
+            // Set amd type to be replaced.
+            var replaceUseminTypeConfig = grunt.config("replaceUseminType") || {};
+            if (!replaceUseminTypeConfig.generated) {
+                replaceUseminTypeConfig.generated = {};
+            }
+
+            if (!replaceUseminTypeConfig.generated.options) {
+                replaceUseminTypeConfig.generated.options = {};
+            }
+
+            if (!replaceUseminTypeConfig.generated.options.types) {
+                replaceUseminTypeConfig.generated.options.types = [];
+            }
+
+            replaceUseminTypeConfig.generated.options.types.push({from: "amd", to: "js"});
+
+            grunt.config("replaceUseminType", replaceUseminTypeConfig);
+            grunt.log.writeln("replaceUseminType configs is now:");
+            grunt.log.writeln(JSON.stringify(replaceUseminTypeConfig, null, 4));
 
             grunt.task.run("requirejs");
         }

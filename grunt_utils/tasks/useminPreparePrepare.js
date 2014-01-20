@@ -70,9 +70,7 @@ module.exports = function(grunt) {
         }
 
         pathGroups.forEach(function(g) {
-            var target = "target-" + g.dir.replace(
-                    new RegExp(path.sep.replace(/[\\\/]/g, "\\$&"), "g"),
-                    "-");
+            var target = "target-" + g.dir;
             useminPrepareConfig[target] = {src: g.paths};
             useminPrepareConfig[target].options = {};
 
