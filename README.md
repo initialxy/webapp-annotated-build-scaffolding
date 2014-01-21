@@ -97,6 +97,8 @@ Remember to change infomation in `package.json` and `bower.json` to yours. You p
 Run:
 
 ```bash
+npm install -g grunt-cli
+npm install -g bower
 npm install
 bower install
 ```
