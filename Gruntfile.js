@@ -148,6 +148,7 @@ module.exports = function(grunt) {
         "configFilesToTarget": {
             genSourceMap: {
                 options: {
+                    targets: ["genSourceMap"],
                     tasks: ["uglify"]
                 }
             }
@@ -205,8 +206,7 @@ module.exports = function(grunt) {
         "copy:html",
         "copy:assets",
         "useminPreparePrepare",
-        "useminPrepare",
-        "configFilesToTarget:genSourceMap"]);
+        "useminPrepare"]);
 
     grunt.registerTask("amdGen", [
         "requirejsPrepare:generated"
@@ -224,6 +224,7 @@ module.exports = function(grunt) {
 
     // Too bad there's no source map gen for CSS with grunt-contrib-cssmin.
     grunt.registerTask("minGenSourceMap", [
+        "configFilesToTarget:genSourceMap",
         "uglify:genSourceMap",
         "cssmin:generated",
         "sourceCopyPrepare:jsSourceMap",

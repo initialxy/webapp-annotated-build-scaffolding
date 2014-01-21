@@ -14,31 +14,35 @@ module.exports = function(grunt) {
         grunt.task.requires("useminPrepare");
 
         var options = this.options();
-        var target = this.target;
 
-        if (target && target != "generated" && options && options.tasks) {
-            options.tasks.forEach(function(t) {
-                var taskConfig = grunt.config(t);
+        if (options && options.tasks && options.targets) {
+            options.targets.forEach(function(target) {
+                if (target !== "generated") {
+                    options.tasks.forEach(function(task) {
+                        var taskConfig = grunt.config(task);
 
-                if (taskConfig && taskConfig.generated
-                        && taskConfig.generated.files) {
-                    if (!taskConfig[target]) {
-                        taskConfig[target] = {};
-                    }
+                        if (taskConfig && taskConfig.generated
+                                && taskConfig.generated.files) {
+                            if (!taskConfig[target]) {
+                                taskConfig[target] = {};
+                            }
 
-                    if (!taskConfig[target].files) {
-                        taskConfig[target].files = [];
-                    }
+                            if (!taskConfig[target].files) {
+                                taskConfig[target].files = [];
+                            }
 
-                    taskConfig[target].files
-                            = taskConfig[target].files
-                            .concat(taskConfig.generated.files);
+                            taskConfig[target].files
+                                    = taskConfig[target].files
+                                    .concat(taskConfig.generated.files);
 
-                    grunt.config(t, taskConfig);
+                            grunt.config(task, taskConfig);
 
-                    grunt.log.writeln(t + " config is now:");
-                    grunt.log.writeln(JSON.stringify(taskConfig, null, 4));
-                } 
+                            grunt.log.writeln(task + " config is now:");
+                            grunt.log.writeln(
+                                    JSON.stringify(taskConfig, null, 4));
+                        } 
+                    });
+                }
             });
         }
     });
