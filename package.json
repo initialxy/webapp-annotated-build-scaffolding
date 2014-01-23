@@ -11,8 +11,6 @@
   "license": "BSD",
   "homepage": "https://github.com/initialxy/webapp-annotated-build-scaffolding",
   "devDependencies": {
-    "bower": "~1.2.8",
-    "grunt": "~0.4.2",
     "grunt-contrib-less": "~0.8.3",
     "grunt-usemin": "~2.0.2",
     "grunt-contrib-uglify": "~0.2.7",
@@ -22,6 +20,7 @@
     "path": "~0.4.9",
     "grunt-contrib-clean": "~0.5.0",
     "grunt-contrib-sass": "~0.6.0",
-    "grunt-contrib-requirejs": "~0.4.1"
+    "grunt-contrib-requirejs": "~0.4.1",
+    "grunt-browserify": "~1.3.0"
   }
 }

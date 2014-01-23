@@ -114,7 +114,10 @@ module.exports = function(grunt) {
                 replaceUseminTypeConfig.generated.options.types = [];
             }
 
-            replaceUseminTypeConfig.generated.options.types.push({from: "amd", to: "js"});
+            replaceUseminTypeConfig.generated.options.types.push({
+                from: "amd",
+                to: "js"
+            });
 
             grunt.config("replaceUseminType", replaceUseminTypeConfig);
             grunt.log.writeln("replaceUseminType configs is now:");
