@@ -1,7 +1,7 @@
 webapp-annotated-build-scaffolding
 ==================================
 
-[Grunt](http://gruntjs.com/) scaffolding to build [LESS](http://lesscss.org/), [SASS](http://sass-lang.com/), [JavaScript source maps](http://www.html5rocks.com/en/tutorials/developertools/sourcemaps/), [AMD](http://requirejs.org/docs/optimization.html) and [CommonJS](http://wiki.commonjs.org/wiki/CommonJS) for web apps based on annotated HTML. It is heavily inspired by [Yoeman](http://yeoman.io/)'s [generator-webapp](https://github.com/yeoman/generator-webapp). I really liked the concept of [grunt-usemin](https://github.com/yeoman/grunt-usemin), but I'm extremely obsessed with the exact things that I want. So I started building a scaffolding for myself.
+[Grunt](http://gruntjs.com/) scaffolding to build [LESS](http://lesscss.org/), [SASS](http://sass-lang.com/), [JavaScript source maps](http://www.html5rocks.com/en/tutorials/developertools/sourcemaps/), [AMD](http://requirejs.org/docs/whyamd.html) and [CommonJS](http://wiki.commonjs.org/wiki/CommonJS) for web apps based on annotated HTML. It is heavily inspired by [Yoeman](http://yeoman.io/)'s [generator-webapp](https://github.com/yeoman/generator-webapp). I really liked the concept of [grunt-usemin](https://github.com/yeoman/grunt-usemin), but I'm extremely obsessed with the exact things that I want. So I started building a scaffolding for myself.
 
 The purpose behind this scaffolding is similar to [generator-webapp](https://github.com/yeoman/generator-webapp). That is you can write HTML files, which link raw JavaScript and CSS files for development. Then you can use [Grunt](http://gruntjs.com/) to process the same HTML files to generate and minify JavaScript and CSS files that are linked. Finally, new HTML files will be generated to link these minified JavaScript and CSS files.
 
@@ -15,9 +15,9 @@ Key Features
 * Any `.less` or `.sass` files will be automatically compiled to CSS.
 * QA build generates JavaScript source map and all the annoying configs are taken care of for you.
 * [htmlrefs](https://github.com/tactivos/grunt-htmlrefs) is ran ahead of time, so you can perform even more magic.
-* Build AMD modules and dependencies with [RequireJS Optimizer](http://requirejs.org/docs/optimization.html).
-* Build CommonJS modules and dependencies with [Browserify](http://browserify.org/).
-* [grunt-contrib-watch](https://github.com/gruntjs/grunt-contrib-watch) integration such that CommonJS modules can be built whenever changes are saved.
+* Build [AMD](http://requirejs.org/docs/whyamd.html) modules and dependencies with [RequireJS Optimizer](http://requirejs.org/docs/optimization.html).
+* Build [CommonJS](http://wiki.commonjs.org/wiki/CommonJS) modules and dependencies with [Browserify](http://browserify.org/).
+* [grunt-contrib-watch](https://github.com/gruntjs/grunt-contrib-watch) integration such that [CommonJS](http://wiki.commonjs.org/wiki/CommonJS) modules can be built whenever changes are saved.
 
 Samples
 -------
@@ -63,7 +63,7 @@ It will be built to the following:
 
 Take a look at `src/index.html` for more details.
 
-To build AMD modules, use the special `amd` build type.
+To build [AMD](http://requirejs.org/docs/whyamd.html) modules, use the special `amd` build type.
 
 ```html
 <!-- build:amd js/amd/amd.js -->
@@ -81,7 +81,7 @@ It will be built to the following:
 
 You can see that in the above example, it uses nested `htmlrefs` ahead of usemin to perform magic. For more details, please see `src/amd1.html` and `src/amd2.html`.
 
-To build CommonJS modules, use the special `commonjs` build type.
+To build [CommonJS](http://wiki.commonjs.org/wiki/CommonJS) modules, use the special `commonjs` build type.
 
 ```html
 <!-- build:commonjs js/commonjs/main.js -->
