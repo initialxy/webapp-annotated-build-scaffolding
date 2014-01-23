@@ -11,8 +11,6 @@ module.exports = function(grunt) {
             "Copy files config from generated target of options.tasks to "
             + "another target that was run against.",
             function() {
-        grunt.task.requires("useminPrepare");
-
         var options = this.options();
 
         if (options && options.tasks && options.targets) {

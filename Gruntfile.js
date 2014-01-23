@@ -17,20 +17,20 @@ module.exports = function(grunt) {
             src: "src",
             dist: "dist",
             bower: "bower_components",
-            staging: ".tmp"
+            staging: ".tmp",
+            configDir: "config",
+            configSrcDir: "build"
         },
         "copy": {
             assets: {
                 files: [{
                         expand: true,
                         cwd: "<%= app.src %>",
-                        filter: "isFile",
                         src: ["assets/**", "images/**", "fonts/**"],
                         dest: "<%= app.dist %>"
                     }, {
                         expand: true,
                         cwd: "<%= app.bower %>/bootstrap/dist",
-                        filter: "isFile",
                         src: ["fonts/**"],
                         dest: "<%= app.dist %>"
                     }
@@ -39,30 +39,27 @@ module.exports = function(grunt) {
             dev: {
                 files: [{
                         expand: true,
-                        cwd: "<%= app.src %>/build/config-dev",
-                        filter: "isFile",
+                        cwd: "<%= app.src %>/<%= app.configSrcDir %>/<%= app.configDir %>-dev",
                         src: ["**"],
-                        dest: "<%= app.src %>/config"
+                        dest: "<%= app.src %>/<%= app.configDir %>"
                     }
                 ]
             },
             qa: {
                 files: [{
                         expand: true,
-                        cwd: "<%= app.src %>/build/config-qa",
-                        filter: "isFile",
+                        cwd: "<%= app.src %>/<%= app.configSrcDir %>/<%= app.configDir %>-qa",
                         src: ["**"],
-                        dest: "<%= app.src %>/config"
+                        dest: "<%= app.src %>/<%= app.configDir %>"
                     }
                 ]
             },
             prd: {
                 files: [{
                         expand: true,
-                        cwd: "<%= app.src %>/build/config-prd",
-                        filter: "isFile",
+                        cwd: "<%= app.src %>/<%= app.configSrcDir %>/<%= app.configDir %>-prd",
                         src: ["**"],
-                        dest: "<%= app.src %>/config"
+                        dest: "<%= app.src %>/<%= app.configDir %>"
                     }
                 ]
             },
@@ -197,9 +194,43 @@ module.exports = function(grunt) {
                 }
             }
         },
+        "configToTask": {
+            uglifyToConcat: {
+                options: {
+                    from: "uglify",
+                    to: "concat"
+                }
+            }
+        },
         "clean": {
             postBuild: ["<%= app.staging %>", "<%= app.src %>/**/*.htmlrefs"],
-            clean: ["<%= app.dist %>", "<%= app.src %>/config"]
+            clean: ["<%= app.dist %>", "<%= app.src %>/<%= app.configDir %>"]
+        },
+        "watch": {
+            commonjs: {
+                files: [
+                    "<%= app.src %>/**/*",
+                    "!<%= app.src %>/**/*.htmlrefs",
+                    // Don't forget to add your config directory to ignore list.
+                    // If you don't have a config directory, remove this line.
+                    "!<%= app.src %>/<%= app.configDir %>/**/*"
+                ],
+                tasks: ["devCommonJs"],
+                options: {
+                    interrupt: true
+                }
+            },
+            // This target can be used when you actively changing configs,
+            // otherwise it's pretty pointless.
+            dev: {
+                files: [
+                    "<%= app.src %>/<%= app.configSrcDir %>/**/*"
+                ],
+                tasks: ["dev"],
+                options: {
+                    interrupt: true
+                }
+            }
         }
     });
 
@@ -213,7 +244,9 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks("grunt-contrib-cssmin");
     grunt.loadNpmTasks('grunt-contrib-htmlmin');
     grunt.loadNpmTasks("grunt-htmlrefs");
+    grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks("grunt-contrib-clean");
+    grunt.loadNpmTasks('grunt-contrib-watch');
 
     grunt.registerTask("prebuild", [
         "copy:htmlrefs",
@@ -221,7 +254,8 @@ module.exports = function(grunt) {
         "copy:html",
         "copy:assets",
         "useminPreparePrepare",
-        "useminPrepare"]);
+        "useminPrepare"
+    ]);
 
     grunt.registerTask("amdGen", [
         "requirejsPrepare:generated"
@@ -235,11 +269,13 @@ module.exports = function(grunt) {
         "cssPrepare:generated",
         "copy:generated",
         "less:generated",
-        "sass:generated"]);
+        "sass:generated"
+    ]);
 
     grunt.registerTask("minExternal", [
         "uglify:generated",
-        "cssmin:generated"]);
+        "cssmin:generated"
+    ]);
 
     // Too bad there's no source map gen for CSS with grunt-contrib-cssmin.
     grunt.registerTask("minExternalGenSourceMap", [
@@ -247,14 +283,17 @@ module.exports = function(grunt) {
         "uglify:genSourceMap",
         "cssmin:generated",
         "sourceCopyPrepare:jsSourceMap",
-        "copy:jsSourceMap"]);
+        "copy:jsSourceMap"
+    ]);
 
     grunt.registerTask("useminWrapped", [
         "replaceUseminType:generated",
-        "usemin"]);
+        "usemin"
+    ]);
 
     grunt.registerTask("finalize", [
-        "clean:postBuild"]);
+        "clean:postBuild"
+    ]);
 
     grunt.registerTask("buildAll", [
         "prebuild",
@@ -281,17 +320,38 @@ module.exports = function(grunt) {
     /****************** Actual tasks you should use to build ******************/
 
     grunt.registerTask("dev", [
-        "copy:dev"]);
+        "copy:dev"
+    ]);
+
+    // This is a special dev build task aimed for projects developed with
+    // CommonJS. Due to the fact that CommonJS modules are not browser
+    // compatible in their raw forms, in order to run them in a browser, they
+    // must be processed by browserify. This task runs the minimun amount of
+    // process to help wrap CommonJS modules and get them to a runnable state.
+    // That also means you will have to run your project from dist directory
+    // instead. See watch task for better convenience.
+    grunt.registerTask("devCommonJs", [
+        "copy:dev",
+        "prebuild",
+        "commonJsGen",
+        "cssGen",
+        "configToTask:uglifyToConcat",
+        "concat:generated",
+        "useminWrapped",
+        "finalize"
+    ]);
 
     grunt.registerTask("prd", [
         "clean",
         "copy:prd",
-        "buildAll"]);
+        "buildAll"
+    ]);
 
     grunt.registerTask("qa", [
         "clean",
         "copy:qa",
-        "buildGenSourceMap"]);
+        "buildGenSourceMap"
+    ]);
 
     grunt.registerTask("default", ["dev"]);
 }
