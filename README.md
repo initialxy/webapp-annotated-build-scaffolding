@@ -16,7 +16,7 @@ Key Features
 * [htmlrefs](https://github.com/tactivos/grunt-htmlrefs) is ran ahead of time, so you can perform even more magic.
 * Build AMD modules and dependencies with [RequireJS Optimizer](http://requirejs.org/docs/optimization.html).
 * Build CommonJS modules and dependencies with [Browserify](http://browserify.org/).
-* [grunt-contrib-watch](https://github.com/gruntjs/grunt-contrib-watch) integration such that CommonJS modules can be built whenever changes are saved.
+* [grunt-contrib-watch](https://github.com/gruntjs/grunt-contrib-watch) integration such that CommonJS modules can be built whenever changes are saved. (Under development.)
 
 Samples
 -------
