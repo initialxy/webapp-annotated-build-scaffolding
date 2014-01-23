@@ -133,7 +133,7 @@ Now you can build your project with: `grunt dev`, `grunt qa` and `grunt prd`. He
 * `grunt qa` copies QA configs to `src` as well as `dist` direcotry. It then compiles, minifies and generates JavaScript, CSS and HTML with JavaScript source maps. Everything inside `dist` directory is ready for distribution. (You should be able to just ZIP up `dist` directory and send it to QA.)
 * `grunt prd` copies production configs to `src` as well as `dist` direcotry. It is very similar to QA build, except it doesn't generate JavaScript source map. Again, `dist` directory is ready for distribution.
 
-Due to the fact that [CommonJS](http://wiki.commonjs.org/wiki/CommonJS) moduels need to be wrapped with [Browserify](http://browserify.org/) before running in a browser. There are tasks specially made for this.
+Due to the fact that [CommonJS](http://wiki.commonjs.org/wiki/CommonJS) moduels need to be wrapped by [Browserify](http://browserify.org/) before running in a browser, there are tasks to make it more convenient.
 
 * `devCommonJs` builds [CommonJS](http://wiki.commonjs.org/wiki/CommonJS) modules with minimun amount of process. It does not perform any kind of minification or even full clean to keep things running as fast as possible. But we will have to run your app from `dist` directory instead.
 * `watch:devCommonJs` uses [grunt-contrib-watch](https://github.com/gruntjs/grunt-contrib-watch) to watch changes you make. It will automatically run `devCommonJs` task whenever you save files. You should take a quick look at the `watch` task configs in `Gruntfile.js` to make sure that it ignored all the files you modify during build to avoid infinite build calls.
