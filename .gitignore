@@ -1,6 +1,6 @@
 bower_components/
 node_modules/
-dist/
-src/config/
-.tmp/
+/dist/
+/src/config/
+/.tmp/
 .DS_Store
