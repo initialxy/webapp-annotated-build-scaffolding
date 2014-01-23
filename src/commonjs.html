@@ -3,6 +3,14 @@
     <head>
         <title>Hello CommonJS!</title>
 
+        <!--
+        Building CommonJS modules with Browserify is very straightforward. It
+        looks just like js build type, but Browserify will be used to wrap them.
+        Please note that CommonJS modules cannot be imported into browser in
+        their raw forms. So you are expected to build it first and run it from
+        dist directory.
+        -->
+
         <!-- build:commonjs js/commonjs/main.js -->
         <script src="js/commonjs/start.js"></script>
         <!-- endbuild -->
@@ -11,15 +19,5 @@
         <div>
             Hello CommonJS!
         </div>
-
-        <p>
-            Note that due to the nature of CommonJS, its modules are not browser compatible in their raw forms. You will have to at least run
-
-            <pre>
-    grunt commonJsDev
-            </pre>
-
-            In order to make it browser compatible.
-        </p>
     </body>
 </html>

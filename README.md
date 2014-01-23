@@ -15,7 +15,8 @@ Key Features
 * QA build generates JavaScript source map and all the annoying configs are taken care of for you.
 * [htmlrefs](https://github.com/tactivos/grunt-htmlrefs) is ran ahead of time, so you can perform even more magic.
 * Build AMD modules and dependencies with [RequireJS Optimizer](http://requirejs.org/docs/optimization.html).
-* Build CommonJS modules and dependencies with [Browserify](http://browserify.org/) (under development).
+* Build CommonJS modules and dependencies with [Browserify](http://browserify.org/).
+* [grunt-contrib-watch](https://github.com/gruntjs/grunt-contrib-watch) integration such that CommonJS modules can be built whenever changes are saved.
 
 Samples
 -------
@@ -61,7 +62,7 @@ It will be built to the following:
 
 Take a look at `src/index.html` for more details.
 
-To build AMD modules. Simply use a special `amd` build type.
+To build AMD modules, use the special `amd` build type.
 
 ```html
 <!-- build:amd js/amd/amd.js -->
@@ -78,6 +79,22 @@ It will be built to the following:
 ```
 
 You can see that in the above example, it uses nested `htmlrefs` ahead of usemin to perform magic. For more details, please see `src/amd1.html` and `src/amd2.html`.
+
+To build CommonJS modules, use the special `commonjs` build type.
+
+```html
+<!-- build:commonjs js/commonjs/main.js -->
+<script src="js/commonjs/start.js"></script>
+<!-- endbuild -->
+```
+
+It will be built to the following:
+
+```html
+<script src="js/commonjs/main.js"></script>
+```
+
+For more details, please see `src/commonjs.html`.
 
 Please note that everything under `src` directory serves entirely as samples. They don't actually serve any purposes as scaffolding. Please feel free to delete them.
 
