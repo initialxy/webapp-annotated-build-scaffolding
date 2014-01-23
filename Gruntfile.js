@@ -207,7 +207,7 @@ module.exports = function(grunt) {
             clean: ["<%= app.dist %>", "<%= app.src %>/<%= app.configDir %>"]
         },
         "watch": {
-            commonjs: {
+            devCommonJs: {
                 files: [
                     "<%= app.src %>/**/*",
                     "!<%= app.src %>/**/*.htmlrefs",
