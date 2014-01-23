@@ -72,11 +72,7 @@ module.exports = function(grunt) {
                         cwd: "<%= app.src %>",
                         src: ["**/*.html"],
                         dest: "<%= app.src %>",
-                        rename: function(dest, src) {
-                            return path.join(
-                                    dest,
-                                    replaceSuffix(src, ".html", ".htmlrefs.html"));
-                        }
+                        ext: ".htmlrefs"
                     }
                 ]
             },
@@ -84,13 +80,9 @@ module.exports = function(grunt) {
                 files: [{
                         expand: true,
                         cwd: "<%= app.src %>",
-                        src: ["**/*.htmlrefs.html"],
+                        src: ["**/*.htmlrefs"],
                         dest: "<%= app.dist %>",
-                        rename: function(dest, src) {
-                            return path.join(
-                                    dest,
-                                    replaceSuffix(src, ".htmlrefs.html", ".html"));
-                        }
+                        ext: ".html"
                     }
                 ]
             },
@@ -98,11 +90,11 @@ module.exports = function(grunt) {
         },
         "htmlrefs": {
             build: {
-                src: ["<%= app.src %>/**/*.htmlrefs.html"]
+                src: ["<%= app.src %>/**/*.htmlrefs"]
             }
         },
         "useminPreparePrepare": {
-            html: "<%= app.src %>/**/*.htmlrefs.html",
+            html: "<%= app.src %>/**/*.htmlrefs",
             options: {
                 src: "<%= app.src %>",
                 dest: "<%= app.dist %>",
@@ -184,6 +176,19 @@ module.exports = function(grunt) {
                 keepSpecialComments: "*"
             }
         },
+        "htmlmin": {
+            build: {
+                options: {
+                    removeComments: true,
+                    collapseWhitespace: true
+                },
+                files: [{
+                    expand: true,
+                    dest: ".",
+                    src: ["<%= app.dist %>/**/*.html"]
+                }]
+            }
+        },
         "sourceCopyPrepare": {
             jsSourceMap: {
                 options: {
@@ -193,7 +198,7 @@ module.exports = function(grunt) {
             }
         },
         "clean": {
-            postBuild: ["<%= app.staging %>", "<%= app.src %>/**/*.htmlrefs.html"],
+            postBuild: ["<%= app.staging %>", "<%= app.src %>/**/*.htmlrefs"],
             clean: ["<%= app.dist %>", "<%= app.src %>/config"]
         }
     });
@@ -206,6 +211,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks("grunt-contrib-less");
     grunt.loadNpmTasks("grunt-contrib-sass");
     grunt.loadNpmTasks("grunt-contrib-cssmin");
+    grunt.loadNpmTasks('grunt-contrib-htmlmin');
     grunt.loadNpmTasks("grunt-htmlrefs");
     grunt.loadNpmTasks("grunt-contrib-clean");
 
@@ -231,29 +237,33 @@ module.exports = function(grunt) {
         "less:generated",
         "sass:generated"]);
 
-    grunt.registerTask("min", [
+    grunt.registerTask("minExternal", [
         "uglify:generated",
         "cssmin:generated"]);
 
     // Too bad there's no source map gen for CSS with grunt-contrib-cssmin.
-    grunt.registerTask("minGenSourceMap", [
+    grunt.registerTask("minExternalGenSourceMap", [
         "configFilesToTarget:genSourceMap",
         "uglify:genSourceMap",
         "cssmin:generated",
         "sourceCopyPrepare:jsSourceMap",
         "copy:jsSourceMap"]);
 
-    grunt.registerTask("finalize", [
+    grunt.registerTask("useminWrapped", [
         "replaceUseminType:generated",
-        "usemin",
+        "usemin"]);
+
+    grunt.registerTask("finalize", [
         "clean:postBuild"]);
 
-    grunt.registerTask("build", [
+    grunt.registerTask("buildAll", [
         "prebuild",
         "amdGen",
         "commonJsGen",
         "cssGen",
-        "min",
+        "minExternal",
+        "useminWrapped",
+        "htmlmin:build",
         "finalize"
     ]);
 
@@ -262,7 +272,9 @@ module.exports = function(grunt) {
         "amdGen",
         "commonJsGen",
         "cssGen",
-        "minGenSourceMap",
+        "minExternalGenSourceMap",
+        "useminWrapped",
+        "htmlmin:build",
         "finalize"
     ]);
 
@@ -274,7 +286,7 @@ module.exports = function(grunt) {
     grunt.registerTask("prd", [
         "clean",
         "copy:prd",
-        "build"]);
+        "buildAll"]);
 
     grunt.registerTask("qa", [
         "clean",
