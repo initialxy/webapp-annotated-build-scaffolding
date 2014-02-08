@@ -35,7 +35,7 @@ function groupPaths(/* [""] */ paths) {
 
 /**
  * This task is a workaround for a usemin issue documented here:
- * https://github.com/yeoman/grunt-usemin/issues/184
+ * https://github.com/yeoman/grunt-usemin/issues/266
  * Once this issue is resolved, this whole task should be removed. Its config
  * is intended to be exactly the same as useminPrepare, except you need to
  * specify an additional options property, src, which specifies where your src
